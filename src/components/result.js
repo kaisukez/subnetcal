@@ -9,7 +9,7 @@ class Result extends Component {
     return (
       <div>
         <p>state: {this.props.networkClass}</p>
-        <p>subnetValue: {this.props.subnetValue}</p>
+        <p>subnetNumber: {this.props.subnetNumber}</p>
         <p>ip: {this.props.ip}</p>
         -------------
         <table>
@@ -20,11 +20,11 @@ class Result extends Component {
             </tr>
             <tr>
               <td>Subnet Mask</td>
-              <td>{this.props.commitSubnetValue}</td>
+              <td>{this.props.commitSubnetNumber}</td>
             </tr>
             <tr>
               <td>IP Class</td>
-              <td>{this.props.commitNetworkClass}</td>
+              <td>{this.props.commitIPClass}</td>
             </tr>
           </tbody>
         </table>
