@@ -11,26 +11,26 @@ class App extends Component {
   constructor(props) {
     super(props)
     let baseIP = "158.108.0.1";
-    let baseSubnetValue = "255.255.255.0";
+    let baseNetworkAddress = "158.108.0.0";
     let baseIPClass = "C";
     let baseWildcardMask = "0.0.0.255";
     let baseCIDR = 24;
 
     this.state = {
       hasResult: false,
-
       networkClass: "any",
-      subnetValue: baseCIDR,
-      subnetNumber: baseSubnetValue,
-      ip: baseIP,
       options: this.generateSubnet(32),
 
+      ip: baseIP,
+      networkAddress: baseNetworkAddress,
+      subnetValue: baseCIDR,
       wildcardMask: baseWildcardMask,
       ipClass: baseIPClass,
       cidr: "/" + baseCIDR,
 
       commitIP: baseIP,
-      commitSubnetValue: baseSubnetValue,
+      commitNetworkAddress: baseNetworkAddress,
+      commitSubnetValue: baseCIDR,
       commitWildcardMask: baseWildcardMask,
       commitIPClass: baseIPClass,
       commitCIDR: "/" + baseCIDR,
@@ -47,17 +47,24 @@ class App extends Component {
       cidr: "/" + event.target.value,
       ipClass: this.calIPClass(event.target.value),
       wildcardMask: ip.not(ip.fromPrefixLen(event.target.value)),
+      networkAddress: ip.mask(this.state.ip, ip.fromPrefixLen(event.target.value)),
     })
   }
 
   ipHandler(event) {
     this.setState({ip: event.target.value})
+    if(ip.isV4Format(event.target.value)) {
+      this.setState({
+        networkAddress: ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)),
+      })
+    }
   }
 
   commit() {
     this.setState({
       hasResult: true,
       commitIP: this.state.ip,
+      commitNetworkAddress: this.state.networkAddress,
       commitSubnetValue: this.state.subnetValue,
       commitWildcardMask: this.state.wildcardMask,
       commitIPClass: this.state.ipClass,
@@ -128,6 +135,7 @@ class App extends Component {
           ip={this.state.ip}
 
           commitIP={this.state.commitIP}
+          commitNetworkAddress={this.state.commitNetworkAddress}
           commitSubnetNumber={ip.fromPrefixLen(this.state.commitSubnetValue)}
           commitWildcardMask={this.state.commitWildcardMask}
           commitIPClass={this.state.commitIPClass}

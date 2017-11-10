@@ -24,6 +24,7 @@ class Result extends Component {
         <table>
           <tbody>
             { this.generateRow('IP Address', this.props.commitIP) }
+            { this.generateRow('Network Address', this.props.commitNetworkAddress) }
             { this.generateRow('Subnet Mask', this.props.commitSubnetNumber) }
             { this.generateRow('Wildcard Mask', this.props.commitWildcardMask) }
             { this.generateRow('IP Class', this.props.commitIPClass) }
