@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 
 class Result extends Component {
+  generateRow(name, value) {
+    return (
+      <tr>
+        <td>{name}</td>
+        <td>{value}</td>
+      </tr>
+    )
+  }
+
   render() {
     if(!this.props.hasResult) {
       return null;
@@ -14,22 +23,11 @@ class Result extends Component {
         -------------
         <table>
           <tbody>
-            <tr>
-              <td>IP Address</td>
-              <td>{this.props.commitIP}</td>
-            </tr>
-            <tr>
-              <td>Subnet Mask</td>
-              <td>{this.props.commitSubnetNumber}</td>
-            </tr>
-            <tr>
-            <td>Wildcard Mask</td>
-            <td>{this.props.commitWildcardMask}</td>
-            </tr>
-            <tr>
-              <td>IP Class</td>
-              <td>{this.props.commitIPClass}</td>
-            </tr>
+            { this.generateRow('IP Address', this.props.commitIP) }
+            { this.generateRow('Subnet Mask', this.props.commitSubnetNumber) }
+            { this.generateRow('Wildcard Mask', this.props.commitWildcardMask) }
+            { this.generateRow('IP Class', this.props.commitIPClass) }
+            { this.generateRow('CIDR Notation', this.props.commitCIDR) }
           </tbody>
         </table>
       </div>

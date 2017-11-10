@@ -13,24 +13,27 @@ class App extends Component {
     let baseIP = "158.108.0.1";
     let baseSubnetValue = "255.255.255.0";
     let baseIPClass = "C";
-    let baseWildcardMask = "0.0.0.255"
+    let baseWildcardMask = "0.0.0.255";
+    let baseCIDR = 24;
 
     this.state = {
       hasResult: false,
 
       networkClass: "any",
-      subnetValue: baseSubnetValue,
-      subnetNumber: 24,
+      subnetValue: baseCIDR,
+      subnetNumber: baseSubnetValue,
       ip: baseIP,
       options: this.generateSubnet(32),
 
       wildcardMask: baseWildcardMask,
       ipClass: baseIPClass,
+      cidr: "/" + baseCIDR,
 
       commitIP: baseIP,
       commitSubnetValue: baseSubnetValue,
       commitWildcardMask: baseWildcardMask,
       commitIPClass: baseIPClass,
+      commitCIDR: "/" + baseCIDR,
     }
   }
 
@@ -41,6 +44,7 @@ class App extends Component {
   subnetHandler(event) {
     this.setState({
       subnetValue: event.target.value,
+      cidr: "/" + event.target.value,
       ipClass: this.calIPClass(event.target.value),
       wildcardMask: ip.not(ip.fromPrefixLen(event.target.value)),
     })
@@ -57,6 +61,7 @@ class App extends Component {
       commitSubnetValue: this.state.subnetValue,
       commitWildcardMask: this.state.wildcardMask,
       commitIPClass: this.state.ipClass,
+      commitCIDR: this.state.cidr,
     })
   }
 
@@ -113,13 +118,12 @@ class App extends Component {
           commit={this.commit.bind(this)}
           clear={this.clear.bind(this)}
           options={this.state.options}
-          subnetNumber={this.state.subnetValue}
+          subnetValue={this.state.subnetValue}
           ip={this.state.ip}
         />
         <Result
           hasResult={this.state.hasResult}
           networkClass={this.state.networkClass}
-          subnetValue={this.state.subnetValue}
           subnetNumber={ip.fromPrefixLen(this.state.subnetValue)}
           ip={this.state.ip}
 
@@ -127,6 +131,7 @@ class App extends Component {
           commitSubnetNumber={ip.fromPrefixLen(this.state.commitSubnetValue)}
           commitWildcardMask={this.state.commitWildcardMask}
           commitIPClass={this.state.commitIPClass}
+          commitCIDR={this.state.commitCIDR}
         />
         <Footer />
       </div>
