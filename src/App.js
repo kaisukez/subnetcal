@@ -12,6 +12,7 @@ class App extends Component {
     super(props)
     let baseIP = "158.108.0.1";
     let baseNetworkAddress = "158.108.0.0";
+    let baseBroadcastAddress = "158.108.0.255"
     let baseIPClass = "C";
     let baseWildcardMask = "0.0.0.255";
     let baseCIDR = 24;
@@ -24,6 +25,7 @@ class App extends Component {
 
       ip: baseIP,
       networkAddress: baseNetworkAddress,
+      broadcastAddress: baseBroadcastAddress,
       subnetValue: baseCIDR,
       wildcardMask: baseWildcardMask,
       ipClass: baseIPClass,
@@ -32,6 +34,7 @@ class App extends Component {
 
       commitIP: baseIP,
       commitNetworkAddress: baseNetworkAddress,
+      commitBroadcastAddress: baseBroadcastAddress,
       commitSubnetValue: baseCIDR,
       commitWildcardMask: baseWildcardMask,
       commitIPClass: baseIPClass,
@@ -51,6 +54,7 @@ class App extends Component {
       ipClass: this.calIPClass(event.target.value),
       wildcardMask: ip.not(ip.fromPrefixLen(event.target.value)),
       networkAddress: ip.mask(this.state.ip, ip.fromPrefixLen(event.target.value)),
+      broadcastAddress: ip.cidrSubnet(this.state.ip + '/' + event.target.value).broadcastAddress,
     })
   }
 
@@ -60,6 +64,7 @@ class App extends Component {
       this.setState({
         networkAddress: ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)),
         ipType: ip.isPrivate(event.target.value) ? "Private" : "Public",
+        broadcastAddress: ip.cidrSubnet(event.target.value + '/' + this.state.subnetValue).broadcastAddress,
       })
     }
   }
@@ -69,6 +74,7 @@ class App extends Component {
       hasResult: true,
       commitIP: this.state.ip,
       commitNetworkAddress: this.state.networkAddress,
+      commitBroadcastAddress: this.state.broadcastAddress,
       commitSubnetValue: this.state.subnetValue,
       commitWildcardMask: this.state.wildcardMask,
       commitIPClass: this.state.ipClass,
@@ -141,6 +147,7 @@ class App extends Component {
 
           commitIP={this.state.commitIP}
           commitNetworkAddress={this.state.commitNetworkAddress}
+          commitBroadcastAddress={this.state.commitBroadcastAddress}
           commitSubnetNumber={ip.fromPrefixLen(this.state.commitSubnetValue)}
           commitWildcardMask={this.state.commitWildcardMask}
           commitIPClass={this.state.commitIPClass}

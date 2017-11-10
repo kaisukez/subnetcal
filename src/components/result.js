@@ -25,11 +25,13 @@ class Result extends Component {
           <tbody>
             { this.generateRow('IP Address', this.props.commitIP) }
             { this.generateRow('Network Address', this.props.commitNetworkAddress) }
+            { this.generateRow('Broadcast Address', this.props.commitBroadcastAddress) }
             { this.generateRow('Subnet Mask', this.props.commitSubnetNumber) }
             { this.generateRow('Wildcard Mask', this.props.commitWildcardMask) }
             { this.generateRow('IP Class', this.props.commitIPClass) }
             { this.generateRow('CIDR Notation', this.props.commitCIDR) }
             { this.generateRow('IP Type', this.props.commitIPType) }
+            { this.generateRow('Short', this.props.commitIP + this.props.commitCIDR) }
           </tbody>
         </table>
       </div>
