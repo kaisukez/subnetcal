@@ -44,14 +44,14 @@ class App extends Component {
   //   }
   // }
 
-  times(x) {
-    return funciton(f) {
-      if (x > 0) {
-        f()
-        this.times(x - 1)(f)
-      }
-    }
-  }
+  // times(x) {
+  //   return funciton(f) {
+  //     if (x > 0) {
+  //       f()
+  //       this.times(x - 1)(f)
+  //     }
+  //   }
+  // }
 
   manageOptions() {
     let options
