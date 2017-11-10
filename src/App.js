@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ip from 'ip';
 import './App.css';
 
 import InputBlock from './components/input-block'
@@ -7,23 +8,30 @@ import Result from './components/result'
 class App extends Component {
   constructor(props) {
     super(props)
+    let baseIP = "158.108.0.1";
+    let baseSubnet = "255.255.255.0";
+
     this.state = {
+      hasResult: false,
+
       networkClass: "any",
-      subnet: "192",
-      ip: "158.108.0.0",
+      subnetValue: baseSubnet,
+      subnetNumber: 24,
+      ip: baseIP,
+      options: this.generateSubnet(32),
+
+      commitIP: baseIP,
+      commitSubnetValue: baseSubnet,
       commitNetworkClass: "any",
-      commitSubnet: "192",
-      commitIP: "158.108.0.0"
     }
   }
 
   networkClassHandler(event) {
-    // this.setState({networkClass: event.target.value}, this.manageOptions)
-    this.setState({networkClass: event.target.value})
+    this.setState({networkClass: event.target.value}, this.manageOptions)
   }
 
   subnetHandler(event) {
-    this.setState({subnet: event.target.value})
+    this.setState({subnetValue: event.target.value})
   }
 
   ipHandler(event) {
@@ -33,31 +41,45 @@ class App extends Component {
   commit() {
     this.setState({
       commitNetworkClass: this.state.networkClass,
-      commitSubnet: this.state.subnet,
-      commitIP: this.state.ip
+      commitSubnetValue: this.state.subnetValue,
+      commitIP: this.state.ip,
+      hasResult: true
     })
   }
 
-  // times = x => f => {
-  //   if (x > 0) {
-  //     f()
-  //     this.times(x - 1)(f)
-  //   }
-  // }
+  clear() {
+    this.setState({ hasResult: false })
+  }
 
-  // times(x) {
-  //   return funciton(f) {
-  //     if (x > 0) {
-  //       f()
-  //       this.times(x - 1)(f)
-  //     }
-  //   }
-  // }
+  generateSubnet(quantity) {
+    return Array(quantity).fill().map((_, i) => {
+      return {
+        name: ip.fromPrefixLen(32-i) + ' / ' + (32-i),
+        number: 32-i,
+        value: ip.fromPrefixLen(32-i)
+      }
+    })
+  }
 
   manageOptions() {
     let options
-    if (this.state.networkClass === "any")
-      this.times(32)(console.log("wooo"))
+    if (this.state.networkClass === "any") {
+      options = this.generateSubnet(32)
+    }
+    if (this.state.networkClass === "a") {
+      options = this.generateSubnet(25)
+    }
+    if (this.state.networkClass === "b") {
+      options = this.generateSubnet(17)
+    }
+    if (this.state.networkClass === "c") {
+      options = this.generateSubnet(9)
+    }
+    this.setState({ options })
+  }
+
+  calIPClass() {
+
   }
 
   render() {
@@ -68,14 +90,19 @@ class App extends Component {
           subnetHandler={this.subnetHandler.bind(this)}
           ipHandler={this.ipHandler.bind(this)}
           commit={this.commit.bind(this)}
+          clear={this.clear.bind(this)}
+          options={this.state.options}
+          subnetValue={this.state.subnetValue}
+          ip={this.state.ip}
         />
         <Result
+          hasResult={this.state.hasResult}
           networkClass={this.state.networkClass}
-          subnet={this.state.subnet}
+          subnetValue={this.state.subnetValue}
           ip={this.state.ip}
-          commitNetworkClass={this.state.commitNetworkClass}
-          commitSubnet={this.state.commitSubnet}
           commitIP={this.state.commitIP}
+          commitSubnetValue={this.state.commitSubnetValue}
+          commitNetworkClass={this.state.commitNetworkClass}
         />
       </div>
     );
