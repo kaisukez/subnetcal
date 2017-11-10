@@ -15,6 +15,7 @@ class App extends Component {
     let baseIPClass = "C";
     let baseWildcardMask = "0.0.0.255";
     let baseCIDR = 24;
+    let baseIPType = "Public";
 
     this.state = {
       hasResult: false,
@@ -27,6 +28,7 @@ class App extends Component {
       wildcardMask: baseWildcardMask,
       ipClass: baseIPClass,
       cidr: "/" + baseCIDR,
+      ipType: baseIPType,
 
       commitIP: baseIP,
       commitNetworkAddress: baseNetworkAddress,
@@ -34,6 +36,7 @@ class App extends Component {
       commitWildcardMask: baseWildcardMask,
       commitIPClass: baseIPClass,
       commitCIDR: "/" + baseCIDR,
+      commitType: baseIPType,
     }
   }
 
@@ -56,6 +59,7 @@ class App extends Component {
     if(ip.isV4Format(event.target.value)) {
       this.setState({
         networkAddress: ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)),
+        ipType: ip.isPrivate(event.target.value) ? "Private" : "Public",
       })
     }
   }
@@ -69,6 +73,7 @@ class App extends Component {
       commitWildcardMask: this.state.wildcardMask,
       commitIPClass: this.state.ipClass,
       commitCIDR: this.state.cidr,
+      commitIPType: this.state.ipType,
     })
   }
 
@@ -140,6 +145,7 @@ class App extends Component {
           commitWildcardMask={this.state.commitWildcardMask}
           commitIPClass={this.state.commitIPClass}
           commitCIDR={this.state.commitCIDR}
+          commitIPType={this.state.commitIPType}
         />
         <Footer />
       </div>

@@ -29,6 +29,7 @@ class Result extends Component {
             { this.generateRow('Wildcard Mask', this.props.commitWildcardMask) }
             { this.generateRow('IP Class', this.props.commitIPClass) }
             { this.generateRow('CIDR Notation', this.props.commitCIDR) }
+            { this.generateRow('IP Type', this.props.commitIPType) }
           </tbody>
         </table>
       </div>
