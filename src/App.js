@@ -49,8 +49,8 @@ class App extends Component {
   commit() {
     this.setState({
       hasResult: true,
-      commitSubnetValue: this.state.subnetValue,
       commitIP: this.state.ip,
+      commitSubnetValue: this.state.subnetValue,
       commitIPClass: this.state.ipClass,
     })
   }
