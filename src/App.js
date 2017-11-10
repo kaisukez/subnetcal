@@ -18,7 +18,8 @@ class App extends Component {
   }
 
   networkClassHandler(event) {
-    this.setState({networkClass: event.target.value}, this.manageOptions)
+    // this.setState({networkClass: event.target.value}, this.manageOptions)
+    this.setState({networkClass: event.target.value})
   }
 
   subnetHandler(event) {
