@@ -13,6 +13,7 @@ class App extends Component {
     let baseIP = "158.108.0.1";
     let baseSubnetValue = "255.255.255.0";
     let baseIPClass = "C";
+    let baseWildcardMask = "0.0.0.255"
 
     this.state = {
       hasResult: false,
@@ -23,10 +24,12 @@ class App extends Component {
       ip: baseIP,
       options: this.generateSubnet(32),
 
+      wildcardMask: baseWildcardMask,
       ipClass: baseIPClass,
 
       commitIP: baseIP,
       commitSubnetValue: baseSubnetValue,
+      commitWildcardMask: baseWildcardMask,
       commitIPClass: baseIPClass,
     }
   }
@@ -38,7 +41,8 @@ class App extends Component {
   subnetHandler(event) {
     this.setState({
       subnetValue: event.target.value,
-      ipClass: this.calIPClass(event.target.value)
+      ipClass: this.calIPClass(event.target.value),
+      wildcardMask: ip.not(ip.fromPrefixLen(event.target.value)),
     })
   }
 
@@ -51,6 +55,7 @@ class App extends Component {
       hasResult: true,
       commitIP: this.state.ip,
       commitSubnetValue: this.state.subnetValue,
+      commitWildcardMask: this.state.wildcardMask,
       commitIPClass: this.state.ipClass,
     })
   }
@@ -114,11 +119,13 @@ class App extends Component {
         <Result
           hasResult={this.state.hasResult}
           networkClass={this.state.networkClass}
+          subnetValue={this.state.subnetValue}
           subnetNumber={ip.fromPrefixLen(this.state.subnetValue)}
           ip={this.state.ip}
 
           commitIP={this.state.commitIP}
           commitSubnetNumber={ip.fromPrefixLen(this.state.commitSubnetValue)}
+          commitWildcardMask={this.state.commitWildcardMask}
           commitIPClass={this.state.commitIPClass}
         />
         <Footer />

@@ -23,6 +23,10 @@ class Result extends Component {
               <td>{this.props.commitSubnetNumber}</td>
             </tr>
             <tr>
+            <td>Wildcard Mask</td>
+            <td>{this.props.commitWildcardMask}</td>
+            </tr>
+            <tr>
               <td>IP Class</td>
               <td>{this.props.commitIPClass}</td>
             </tr>
