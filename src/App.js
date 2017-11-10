@@ -10,8 +10,9 @@ import Result from './components/result'
 class App extends Component {
   constructor(props) {
     super(props)
-    let baseIP = "158.108.0.1";
+    let baseIP = "158.108.12.34";
     let baseNetworkAddress = "158.108.0.0";
+    let baseUseableHostIPRange = "158.108.0.1 - 158.108.0.254"
     let baseBroadcastAddress = "158.108.0.255"
     let baseIPClass = "C";
     let baseWildcardMask = "0.0.0.255";
@@ -25,6 +26,7 @@ class App extends Component {
 
       ip: baseIP,
       networkAddress: baseNetworkAddress,
+      useableHostIPRange: baseUseableHostIPRange,
       broadcastAddress: baseBroadcastAddress,
       subnetValue: baseCIDR,
       wildcardMask: baseWildcardMask,
@@ -34,6 +36,7 @@ class App extends Component {
 
       commitIP: baseIP,
       commitNetworkAddress: baseNetworkAddress,
+      commitUseableHostIPRange: baseUseableHostIPRange,
       commitBroadcastAddress: baseBroadcastAddress,
       commitSubnetValue: baseCIDR,
       commitWildcardMask: baseWildcardMask,
@@ -48,23 +51,27 @@ class App extends Component {
   }
 
   subnetHandler(event) {
+    let obj = ip.cidrSubnet(this.state.ip + '/' + event.target.value);
     this.setState({
       subnetValue: event.target.value,
       cidr: "/" + event.target.value,
       ipClass: this.calIPClass(event.target.value),
       wildcardMask: ip.not(ip.fromPrefixLen(event.target.value)),
       networkAddress: ip.mask(this.state.ip, ip.fromPrefixLen(event.target.value)),
-      broadcastAddress: ip.cidrSubnet(this.state.ip + '/' + event.target.value).broadcastAddress,
+      broadcastAddress: obj.broadcastAddress,
+      useableHostIPRange: obj.firstAddress + ' - ' + obj.lastAddress,
     })
   }
 
   ipHandler(event) {
+    let obj = ip.cidrSubnet(event.target.value + '/' + this.state.subnetValue);
     this.setState({ip: event.target.value})
     if(ip.isV4Format(event.target.value)) {
       this.setState({
         networkAddress: ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)),
         ipType: ip.isPrivate(event.target.value) ? "Private" : "Public",
-        broadcastAddress: ip.cidrSubnet(event.target.value + '/' + this.state.subnetValue).broadcastAddress,
+        broadcastAddress: obj.broadcastAddress,
+        useableHostIPRange: obj.firstAddress + ' - ' + obj.lastAddress,
       })
     }
   }
@@ -74,6 +81,7 @@ class App extends Component {
       hasResult: true,
       commitIP: this.state.ip,
       commitNetworkAddress: this.state.networkAddress,
+      commitUseableHostIPRange: this.state.useableHostIPRange,
       commitBroadcastAddress: this.state.broadcastAddress,
       commitSubnetValue: this.state.subnetValue,
       commitWildcardMask: this.state.wildcardMask,
@@ -147,6 +155,7 @@ class App extends Component {
 
           commitIP={this.state.commitIP}
           commitNetworkAddress={this.state.commitNetworkAddress}
+          commitUseableHostIPRange={this.state.commitUseableHostIPRange}
           commitBroadcastAddress={this.state.commitBroadcastAddress}
           commitSubnetNumber={ip.fromPrefixLen(this.state.commitSubnetValue)}
           commitWildcardMask={this.state.commitWildcardMask}

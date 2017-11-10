@@ -25,6 +25,7 @@ class Result extends Component {
           <tbody>
             { this.generateRow('IP Address', this.props.commitIP) }
             { this.generateRow('Network Address', this.props.commitNetworkAddress) }
+            { this.generateRow('Usable Host IP Range', this.props.commitUseableHostIPRange) }
             { this.generateRow('Broadcast Address', this.props.commitBroadcastAddress) }
             { this.generateRow('Subnet Mask', this.props.commitSubnetNumber) }
             { this.generateRow('Wildcard Mask', this.props.commitWildcardMask) }
