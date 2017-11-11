@@ -4,7 +4,7 @@ class Header extends Component {
   render() {
     return (
       <div>
-        <h1>IP Subnet Calculator</h1>
+        <h1 className="header main-header">IP Subnet Calculator</h1>
       </div>
     )
   }

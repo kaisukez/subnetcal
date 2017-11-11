@@ -1,3 +1,77 @@
-td {
+* {
+  margin: 0;
+}
+
+.App {
+  max-width: 600px;
+  margin: auto;
+}
+
+.main-header, .sub-header {
+  text-align: center;
+}
+
+.main-header {
+  margin-top: 10px;
+  /*text-transform: uppercase;*/
+}
+
+.sub-header {
+  margin-bottom: 10px;
+}
+
+.space-main-header {
+  margin-bottom: 10px;
+}
+
+.space-input-box {
+  margin-bottom: 22px;
+}
+
+.space-between-result {
+  margin-bottom: 22px;
+}
+
+/* INPUT */
+
+.input-box {
+  border: 2px solid grey;
+  padding-top: 20px;
+  padding-bottom: 18px;
+}
+
+.input-row {
+  height: 30px;
+  line-height: 100%;
+}
+
+.input-text {
+  text-align: right;
+}
+
+#invalid-ip {
+  position: relative;
+  top: 3px;
+  color: red;
+}
+
+label {
+  margin-left: 3px;
+  margin-right: 20px;
+}
+
+/*END INPUT*/
+
+.footer-text {
+  text-align: center;
+}
+
+/*td {
   border: 1px solid black;
+}*/
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
 }

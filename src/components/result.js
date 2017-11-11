@@ -28,16 +28,16 @@ class Result extends Component {
 
   generateAllPossibleNetworkHeader() {
     if(this.props.subnetValue <= 7)
-      return <h2>All Possible {this.props.cidr} Networks</h2>
+      return <h2 className="header sub-header">All Possible {this.props.cidr} Networks</h2>
     else
-      return   <h2>All Possible {this.props.cidr} Networks for {this.props.networkAddressForH1}</h2>
+      return <h2 className="header sub-header">All Possible {this.props.cidr} Networks for {this.props.networkAddressForH1}</h2>
   }
 
   render() {
     return (
-      <div>
-        <h2>Result</h2>
-        <table>
+      <div className="my-box result-box">
+        <h2 className="header sub-header">Result</h2>
+        <table className="table table-sm table-hover">
           <tbody>
             { this.generateRow2('IP Address', this.props.ipAddress) }
             { this.generateRow2('Network Address', this.props.networkAddress) }
@@ -57,15 +57,15 @@ class Result extends Component {
             { this.generateRow2('Hex ID', this.props.hexID) }
           </tbody>
         </table>
-
+        <div className="space space-between-result"></div>
 
         {this.generateAllPossibleNetworkHeader()}
-        <table>
-          <thead>
+        <table className="table table-sm table-hover">
+          <thead className="thead-dark">
             <tr>
-              <td>Network Address</td>
-              <td>Usable Host Range</td>
-              <td>Broadcast Address</td>
+              <th>Network Address</th>
+              <th>Usable Host Range</th>
+              <th>Broadcast Address</th>
             </tr>
           </thead>
           <tbody>

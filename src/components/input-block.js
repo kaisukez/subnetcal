@@ -15,48 +15,55 @@ class InputBlock extends Component {
 
   generateError() {
     if(!this.props.isIPValid)
-      return <span id="invalid-ip">invalid ipv4</span>
+      return <div className="input-row" id="invalid-ip">invalid ipv4</div>
     else
       return null;
   }
 
   render() {
     return (
-      <div>
-        <div className="network-class">
-          Network Class
-          <input type="radio" name="class" value="any" id="any" onChange={this.props.networkClassHandler} defaultChecked={true}/>
-          <label htmlFor="any">Any</label>
+      <div className="my-box input-box">
+        <div className="input-row row">
+          <div className="input-text col-md-3">Network Class</div>
+          <div className="col-md-9">
+            <input type="radio" name="class" value="any" id="any" onChange={this.props.networkClassHandler} defaultChecked={true}/>
+            <label htmlFor="any">Any</label>
 
-          <input type="radio" name="class" value="a" id="a" onChange={this.props.networkClassHandler}/>
-          <label htmlFor="a">A</label>
+            <input type="radio" name="class" value="a" id="a" onChange={this.props.networkClassHandler}/>
+            <label htmlFor="a">A</label>
 
-          <input type="radio" name="class" value="b" id="b" onChange={this.props.networkClassHandler}/>
-          <label htmlFor="b">B</label>
+            <input type="radio" name="class" value="b" id="b" onChange={this.props.networkClassHandler}/>
+            <label htmlFor="b">B</label>
 
-          <input type="radio" name="class" value="c" id="c" onChange={this.props.networkClassHandler}/>
-          <label htmlFor="c">C</label>
+            <input type="radio" name="class" value="c" id="c" onChange={this.props.networkClassHandler}/>
+            <label htmlFor="c">C</label>
+          </div>
         </div>
 
-        <div className="subnet">
-          Subnet
-          <select
-            onChange={this.props.subnetHandler}
-            value={this.props.subnetValue}
-          >
-            {this.renderOptions()}
-          </select>
+        <div className="input-row row">
+          <div className="input-text col-md-3">Subnet</div>
+          <div className="col-md-9">
+            <select
+              onChange={this.props.subnetHandler}
+              value={this.props.subnetValue}
+            >
+              {this.renderOptions()}
+            </select>
+          </div>
         </div>
 
-        <div className="ip-input">
-          IP Address
-          <input
-            type="text"
-            onChange={this.props.ipHandler}
-            value={this.props.ip}
-          />
+        <div className="input-row row">
+          <div className="input-text col-md-3">IP Address</div>
+          <div className="col-md-9">
+            <input
+              type="text"
+              onChange={this.props.ipHandler}
+              value={this.props.ip}
+            />
+            {this.generateError()}
+          </div>
         </div>
-        {this.generateError()}
+
       </div>
     );
   }

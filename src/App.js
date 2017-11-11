@@ -218,6 +218,8 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
+        <div className="space space-main-header"></div>
+
         <InputBlock
           networkClassHandler={this.networkClassHandler.bind(this)}
           subnetHandler={this.subnetHandler.bind(this)}
@@ -227,6 +229,8 @@ class App extends Component {
           ip={this.state.ip}
           isIPValid={this.state.isIPValid}
         />
+        <div className="space space-input-box"></div>
+
         <Result
           hasResult={this.state.hasResult}
           networkClass={this.state.networkClass}
@@ -252,6 +256,8 @@ class App extends Component {
           networkAddressForH1={this.state.networkAddressForH1}
           allPossibleNetwork={this.state.allPossibleNetwork}
         />
+        <div className="space space-result-box"></div>
+
         <Footer />
       </div>
     );
