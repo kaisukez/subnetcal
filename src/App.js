@@ -15,6 +15,7 @@ class App extends Component {
       networkClass: "any",
       options: this.generateSubnet(32),
       ip: "158.108.12.34",
+      ipError: null,
 
       ipAddress: "158.108.12.34",
       networkAddress: "158.108.12.0",
@@ -80,9 +81,9 @@ class App extends Component {
   }
 
   ipHandler(event) {
-    this.setState({ip: event.target.value})
+    this.setState({ip: event.target.value});
 
-    if(ip.isV4Format(event.target.value)) {
+    if(ip.isV4Format(event.target.value) && event.target.value.split('.').every(e => e <= 255)) {
       let obj = ip.cidrSubnet(event.target.value + '/' + this.state.subnetValue);
       let usableHostIPRange, hosts, usableHosts
       if(this.state.subnetValue ==='31') {
@@ -100,6 +101,7 @@ class App extends Component {
       }
 
       this.setState({
+        ipError: null,
         ipAddress: event.target.value,
         networkAddress: ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)),
         ipType: ip.isPrivate(event.target.value) ? "Private" : "Public",
@@ -110,6 +112,8 @@ class App extends Component {
         networkAddressForH1: this.calNetworkAddressForH1(ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)), this.state.subnetValue),
         allPossibleNetwork: this.calAllPossibleNetwork(ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)), this.state.subnetValue),
       })
+    } else {
+      this.setState({ipError: "invalid ipv4"})
     }
   }
 
@@ -221,6 +225,7 @@ class App extends Component {
           options={this.state.options}
           subnetValue={this.state.subnetValue}
           ip={this.state.ip}
+          ipError={this.state.ipError}
         />
         <Result
           hasResult={this.state.hasResult}

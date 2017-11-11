@@ -51,7 +51,7 @@ class Result extends Component {
             { this.generateRow2('IP Class', this.props.ipClass) }
             { this.generateRow2('CIDR Notation', this.props.cidr) }
             { this.generateRow2('IP Type', this.props.ipType) }
-            { this.generateRow2('Short', this.props.ip + this.props.cidr) }
+            { this.generateRow2('Short', this.props.ipAddress + this.props.cidr) }
           </tbody>
         </table>
 

@@ -49,6 +49,7 @@ class InputBlock extends Component {
             value={this.props.ip}
           />
         </div>
+        {this.props.ipError}
       </div>
     );
   }
