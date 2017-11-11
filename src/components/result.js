@@ -31,6 +31,7 @@ class Result extends Component {
             { this.generateRow('Number of Usable Hosts', this.props.commitUsableHosts) }
             { this.generateRow('Subnet Mask', this.props.commitSubnetNumber) }
             { this.generateRow('Wildcard Mask', this.props.commitWildcardMask) }
+            { this.generateRow('Binary Subnet Mask', this.props.commitBinarySubnetMask) }
             { this.generateRow('IP Class', this.props.commitIPClass) }
             { this.generateRow('CIDR Notation', this.props.commitCIDR) }
             { this.generateRow('IP Type', this.props.commitIPType) }

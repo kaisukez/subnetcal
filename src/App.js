@@ -177,6 +177,9 @@ class App extends Component {
   }
 
   render() {
+    let binarySubnetMask = ip.toLong(ip.fromPrefixLen(this.state.commitSubnetValue)).toString(2);
+    binarySubnetMask = [binarySubnetMask.slice(0,8), '.', binarySubnetMask.slice(8,16), '.', binarySubnetMask.slice(16,24), '.', binarySubnetMask.slice(24)]
+    
     return (
       <div className="App">
         <Header />
@@ -204,6 +207,7 @@ class App extends Component {
           commitUsableHosts={this.state.commitUsableHosts}
           commitSubnetNumber={ip.fromPrefixLen(this.state.commitSubnetValue)}
           commitWildcardMask={this.state.commitWildcardMask}
+          commitBinarySubnetMask={binarySubnetMask}
           commitIPClass={this.state.commitIPClass}
           commitCIDR={this.state.commitCIDR}
           commitIPType={this.state.commitIPType}
