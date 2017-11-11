@@ -13,6 +13,13 @@ class InputBlock extends Component {
     )
   }
 
+  generateError() {
+    if(!this.props.isIPValid)
+      return <span id="invalid-ip">invalid ipv4</span>
+    else
+      return null;
+  }
+
   render() {
     return (
       <div>
@@ -49,7 +56,7 @@ class InputBlock extends Component {
             value={this.props.ip}
           />
         </div>
-        {this.props.ipError}
+        {this.generateError()}
       </div>
     );
   }

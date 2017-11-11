@@ -15,7 +15,7 @@ class App extends Component {
       networkClass: "any",
       options: this.generateSubnet(32),
       ip: "158.108.12.34",
-      ipError: null,
+      isIPValid: true,
 
       ipAddress: "158.108.12.34",
       networkAddress: "158.108.12.0",
@@ -101,7 +101,7 @@ class App extends Component {
       }
 
       this.setState({
-        ipError: null,
+        isIPValid: true,
         ipAddress: event.target.value,
         networkAddress: ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)),
         ipType: ip.isPrivate(event.target.value) ? "Private" : "Public",
@@ -113,7 +113,7 @@ class App extends Component {
         allPossibleNetwork: this.calAllPossibleNetwork(ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)), this.state.subnetValue),
       })
     } else {
-      this.setState({ipError: "invalid ipv4"})
+      this.setState({isIPValid: false})
     }
   }
 
@@ -225,7 +225,7 @@ class App extends Component {
           options={this.state.options}
           subnetValue={this.state.subnetValue}
           ip={this.state.ip}
-          ipError={this.state.ipError}
+          isIPValid={this.state.isIPValid}
         />
         <Result
           hasResult={this.state.hasResult}
