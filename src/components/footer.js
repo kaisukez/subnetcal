@@ -4,7 +4,7 @@ class Footer extends Component {
   render() {
     return (
       <div>
-        <p>created by Nattapon Chantasiriworawat (5810504442)</p>
+        <p>created by Nattapon Chantasiriworawat</p>
       </div>
     )
   }

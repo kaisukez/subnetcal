@@ -10,60 +10,51 @@ import Result from './components/result'
 class App extends Component {
   constructor(props) {
     super(props)
-    let baseIP = "158.108.12.34";
-    let baseNetworkAddress = "158.108.12.0";
-    let baseUsableHostIPRange = "158.108.12.1 - 158.108.12.254"
-    let baseBroadcastAddress = "158.108.0.255"
-    let baseHosts = "256";
-    let baseUsableHosts = "254";
-    let baseIPClass = "C";
-    let baseWildcardMask = "0.0.0.255";
-    let baseCIDR = 24;
-    let baseIPType = "Public";
-
     this.state = {
       hasResult: false,
       networkClass: "any",
       options: this.generateSubnet(32),
+      ip: "158.108.12.34",
 
-      ip: baseIP,
-      networkAddress: baseNetworkAddress,
-      usableHostIPRange: baseUsableHostIPRange,
-      broadcastAddress: baseBroadcastAddress,
-      hosts: baseHosts,
-      usableHosts: baseUsableHosts,
-      subnetValue: baseCIDR,
-      wildcardMask: baseWildcardMask,
-      ipClass: baseIPClass,
-      cidr: "/" + baseCIDR,
-      ipType: baseIPType,
-
-      commitIP: baseIP,
-      commitNetworkAddress: baseNetworkAddress,
-      commitUsableHostIPRange: baseUsableHostIPRange,
-      commitBroadcastAddress: baseBroadcastAddress,
-      commitHosts: baseHosts,
-      commitUsableHosts: baseUsableHosts,
-      commitSubnetValue: baseCIDR,
-      commitWildcardMask: baseWildcardMask,
-      commitIPClass: baseIPClass,
-      commitCIDR: "/" + baseCIDR,
-      commitType: baseIPType,
+      ipAddress: "158.108.12.34",
+      networkAddress: "158.108.12.0",
+      usableHostIPRange: "158.108.12.1 - 158.108.12.254",
+      broadcastAddress: "158.108.12.255",
+      hosts: "256",
+      usableHosts: "254",
+      subnetValue: "24",
+      wildcardMask: "0.0.0.255",
+      ipClass: "C",
+      cidr: "/24",
+      ipType: "Public",
+      networkAddressForH1: "158.108.12.*",
+      allPossibleNetwork: Array(1).fill().map((_, i) => {
+        let newNetworkAddress = ip.fromLong(ip.toLong("158.108.12.0") + (256 * i));
+        let obj = ip.subnet(newNetworkAddress, ip.fromPrefixLen("24"))
+        return {
+          networkAddress: newNetworkAddress,
+          usableHostRange: obj.firstAddress + ' - ' + obj.lastAddress,
+          broadcastAddress: obj.broadcastAddress,
+        }
+      }),
     }
   }
 
   networkClassHandler(event) {
-    this.setState({networkClass: event.target.value}, this.manageOptions)
+    this.setState({
+      networkClass: event.target.value,
+      subnetValue: 24,
+    }, this.manageOptions)
   }
 
   subnetHandler(event) {
     let obj = ip.cidrSubnet(this.state.ip + '/' + event.target.value);
     let usableHostIPRange, hosts, usableHosts
-    if(event.target.value == 31) {
+    if(event.target.value === '31') {
       usableHostIPRange = "None";
       hosts = 2;
       usableHosts = 0;
-    } else if(event.target.value == 32) {
+    } else if(event.target.value ==='32') {
       usableHostIPRange = "None";
       hosts = 1;
       usableHosts = 0;
@@ -83,6 +74,8 @@ class App extends Component {
       usableHostIPRange,
       hosts,
       usableHosts,
+      networkAddressForH1: this.calNetworkAddressForH1(ip.mask(this.state.ip, ip.fromPrefixLen(event.target.value)), event.target.value),
+      allPossibleNetwork: this.calAllPossibleNetwork(ip.mask(this.state.ip, ip.fromPrefixLen(event.target.value)), event.target.value),
     })
   }
 
@@ -92,11 +85,11 @@ class App extends Component {
     if(ip.isV4Format(event.target.value)) {
       let obj = ip.cidrSubnet(event.target.value + '/' + this.state.subnetValue);
       let usableHostIPRange, hosts, usableHosts
-      if(this.state.subnetValue == 31) {
+      if(this.state.subnetValue ==='31') {
         usableHostIPRange = "None";
         hosts = 2;
         usableHosts = 0;
-      } else if(this.state.subnetValue == 32) {
+      } else if(this.state.subnetValue === '32') {
         usableHostIPRange = "None";
         hosts = 1;
         usableHosts = 0;
@@ -107,35 +100,17 @@ class App extends Component {
       }
 
       this.setState({
+        ipAddress: event.target.value,
         networkAddress: ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)),
         ipType: ip.isPrivate(event.target.value) ? "Private" : "Public",
         broadcastAddress: obj.broadcastAddress,
         usableHostIPRange,
         hosts,
         usableHosts,
+        networkAddressForH1: this.calNetworkAddressForH1(ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)), this.state.subnetValue),
+        allPossibleNetwork: this.calAllPossibleNetwork(ip.mask(event.target.value, ip.fromPrefixLen(this.state.subnetValue)), this.state.subnetValue),
       })
     }
-  }
-
-  commit() {
-    this.setState({
-      hasResult: true,
-      commitIP: this.state.ip,
-      commitNetworkAddress: this.state.networkAddress,
-      commitUsableHostIPRange: this.state.usableHostIPRange,
-      commitBroadcastAddress: this.state.broadcastAddress,
-      commitHosts: this.state.hosts,
-      commitUsableHosts: this.state.usableHosts,
-      commitSubnetValue: this.state.subnetValue,
-      commitWildcardMask: this.state.wildcardMask,
-      commitIPClass: this.state.ipClass,
-      commitCIDR: this.state.cidr,
-      commitIPType: this.state.ipType,
-    })
-  }
-
-  clear() {
-    this.setState({ hasResult: false })
   }
 
   generateSubnet(quantity) {
@@ -176,10 +151,63 @@ class App extends Component {
       return "None";
   }
 
+  calAllPossibleNetwork(networkAddress, subnetValue) {
+    let offset = 2 ** (32 - subnetValue);
+    let round = this.calRound(subnetValue);
+    networkAddress = this.calNetworkAddressFromPrefix(networkAddress, subnetValue);
+
+    return (
+      Array(round).fill().map((_, i) => {
+        let newNetworkAddress = ip.fromLong(ip.toLong(networkAddress) + (offset * i));
+        let obj = ip.subnet(newNetworkAddress, ip.fromPrefixLen(subnetValue))
+        return {
+          networkAddress: newNetworkAddress,
+          usableHostRange: obj.firstAddress + ' - ' + obj.lastAddress,
+          broadcastAddress: obj.broadcastAddress,
+        }
+      })
+    )
+  }
+
+  calRound(subnetValue) {
+    if(subnetValue >= 24)
+      return 2 ** (subnetValue - 24);
+    else if(subnetValue >= 16)
+      return 2 ** (subnetValue - 16);
+    else if(subnetValue >= 8)
+      return 2 ** (subnetValue - 8);
+    else
+      return 2 ** subnetValue;
+  }
+
+  calNetworkAddressFromPrefix(networkAddress, subnetValue) {
+    if(subnetValue >= 24)
+      return ip.mask(networkAddress, ip.fromPrefixLen(24))
+    else if(subnetValue >= 16)
+      return ip.mask(networkAddress, ip.fromPrefixLen(16))
+    else if(subnetValue >= 8)
+      return ip.mask(networkAddress, ip.fromPrefixLen(8))
+    else
+      return ip.mask(networkAddress, ip.fromPrefixLen(0))
+  }
+
+  calNetworkAddressForH1(networkAddress, subnetValue) {
+    let newNetworkAddress
+    if(subnetValue >= 24)
+      newNetworkAddress = networkAddress.split('.').map((d, i) => i >= 3 ? '*' : d).join('.');
+    else if(subnetValue >= 16)
+      newNetworkAddress = networkAddress.split('.').map((d, i) => i >= 2 ? '*' : d).join('.');
+    else if(subnetValue >= 8)
+      newNetworkAddress = networkAddress.split('.').map((d, i) => i >= 1 ? '*' : d).join('.');
+    else
+      newNetworkAddress = networkAddress.split('.').map(() => '*').join('.');
+    return newNetworkAddress;
+  }
+
   render() {
-    let binarySubnetMask = ip.toLong(ip.fromPrefixLen(this.state.commitSubnetValue)).toString(2);
+    let binarySubnetMask = ip.toLong(ip.fromPrefixLen(this.state.subnetValue)).toString(2);
     binarySubnetMask = [binarySubnetMask.slice(0,8), '.', binarySubnetMask.slice(8,16), '.', binarySubnetMask.slice(16,24), '.', binarySubnetMask.slice(24)]
-    
+
     return (
       <div className="App">
         <Header />
@@ -187,8 +215,6 @@ class App extends Component {
           networkClassHandler={this.networkClassHandler.bind(this)}
           subnetHandler={this.subnetHandler.bind(this)}
           ipHandler={this.ipHandler.bind(this)}
-          commit={this.commit.bind(this)}
-          clear={this.clear.bind(this)}
           options={this.state.options}
           subnetValue={this.state.subnetValue}
           ip={this.state.ip}
@@ -199,18 +225,20 @@ class App extends Component {
           subnetNumber={ip.fromPrefixLen(this.state.subnetValue)}
           ip={this.state.ip}
 
-          commitIP={this.state.commitIP}
-          commitNetworkAddress={this.state.commitNetworkAddress}
-          commitUsableHostIPRange={this.state.commitUsableHostIPRange}
-          commitBroadcastAddress={this.state.commitBroadcastAddress}
-          commitHosts={this.state.commitHosts}
-          commitUsableHosts={this.state.commitUsableHosts}
-          commitSubnetNumber={ip.fromPrefixLen(this.state.commitSubnetValue)}
-          commitWildcardMask={this.state.commitWildcardMask}
-          commitBinarySubnetMask={binarySubnetMask}
-          commitIPClass={this.state.commitIPClass}
-          commitCIDR={this.state.commitCIDR}
-          commitIPType={this.state.commitIPType}
+          ipAddress={this.state.ipAddress}
+          networkAddress={this.state.networkAddress}
+          usableHostIPRange={this.state.usableHostIPRange}
+          broadcastAddress={this.state.broadcastAddress}
+          hosts={this.state.hosts}
+          usableHosts={this.state.usableHosts}
+          // subnetNumber={ip.fromPrefixLen(this.state.subnetValue)}
+          wildcardMask={this.state.wildcardMask}
+          binarySubnetMask={binarySubnetMask}
+          ipClass={this.state.ipClass}
+          cidr={this.state.cidr}
+          ipType={this.state.ipType}
+          networkAddressForH1={this.state.networkAddressForH1}
+          allPossibleNetwork={this.state.allPossibleNetwork}
         />
         <Footer />
       </div>

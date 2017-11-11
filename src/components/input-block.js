@@ -49,8 +49,6 @@ class InputBlock extends Component {
             value={this.props.ip}
           />
         </div>
-        <button onClick={this.props.commit}>Calculate</button>
-        <button onClick={this.props.clear}>Clear</button>
       </div>
     );
   }
