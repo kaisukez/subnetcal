@@ -52,6 +52,9 @@ class Result extends Component {
             { this.generateRow2('CIDR Notation', this.props.cidr) }
             { this.generateRow2('IP Type', this.props.ipType) }
             { this.generateRow2('Short', this.props.ipAddress + this.props.cidr) }
+            { this.generateRow2('Binary ID', this.props.binaryID) }
+            { this.generateRow2('Integer ID', this.props.integerID) }
+            { this.generateRow2('Hex ID', this.props.hexID) }
           </tbody>
         </table>
 

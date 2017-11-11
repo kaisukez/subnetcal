@@ -246,6 +246,9 @@ class App extends Component {
           ipClass={this.state.ipClass}
           cidr={this.state.cidr}
           ipType={this.state.ipType}
+          binaryID={ip.toLong(this.state.ipAddress).toString(2)}
+          integerID={ip.toLong(this.state.ipAddress).toString(10)}
+          hexID={ip.toLong(this.state.ipAddress).toString(16)}
           networkAddressForH1={this.state.networkAddressForH1}
           allPossibleNetwork={this.state.allPossibleNetwork}
         />
