@@ -24,8 +24,8 @@ class InputBlock extends Component {
     return (
       <div className="my-box input-box">
         <div className="input-row row">
-          <div className="input-text col-md-3">Network Class</div>
-          <div className="col-md-9">
+          <div className="input-text col-3">Network Class</div>
+          <div className="col-9">
             <input type="radio" name="class" value="any" id="any" onChange={this.props.networkClassHandler} defaultChecked={true}/>
             <label htmlFor="any">Any</label>
 
@@ -41,8 +41,8 @@ class InputBlock extends Component {
         </div>
 
         <div className="input-row row">
-          <div className="input-text col-md-3">Subnet</div>
-          <div className="col-md-9">
+          <div className="input-text col-3">Subnet</div>
+          <div className="col-9">
             <select
               onChange={this.props.subnetHandler}
               value={this.props.subnetValue}
@@ -53,8 +53,8 @@ class InputBlock extends Component {
         </div>
 
         <div className="input-row row">
-          <div className="input-text col-md-3">IP Address</div>
-          <div className="col-md-9">
+          <div className="input-text col-3">IP Address</div>
+          <div className="col-9">
             <input
               type="text"
               onChange={this.props.ipHandler}
