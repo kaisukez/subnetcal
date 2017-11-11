@@ -41,12 +41,12 @@ class App extends Component {
     }
   }
 
-  componentDidMount() {
-    this.setState({
-      ip: ip.address(),
-      ipAddress: ip.address(),
-    }, this.ipHandler({ target: {value: this.state.ip} }))
-  }
+  // componentDidMount() {
+  //   this.setState({
+  //     ip: ip.address(),
+  //     ipAddress: ip.address(),
+  //   }, this.ipHandler({ target: {value: this.state.ip} }))
+  // }
 
   networkClassHandler(event) {
     this.setState({
