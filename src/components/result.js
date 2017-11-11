@@ -26,6 +26,13 @@ class Result extends Component {
     })
   }
 
+  generateAllPossibleNetworkHeader() {
+    if(this.props.subnetValue <= 7)
+      return <h2>All Possible {this.props.cidr} Networks</h2>
+    else
+      return   <h2>All Possible {this.props.cidr} Networks for {this.props.networkAddressForH1}</h2>
+  }
+
   render() {
     return (
       <div>
@@ -48,7 +55,8 @@ class Result extends Component {
           </tbody>
         </table>
 
-        <h2>All Possible {this.props.cidr} Networks for {this.props.networkAddressForH1}</h2>
+
+        {this.generateAllPossibleNetworkHeader()}
         <table>
           <thead>
             <tr>

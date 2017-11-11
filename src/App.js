@@ -160,9 +160,12 @@ class App extends Component {
       Array(round).fill().map((_, i) => {
         let newNetworkAddress = ip.fromLong(ip.toLong(networkAddress) + (offset * i));
         let obj = ip.subnet(newNetworkAddress, ip.fromPrefixLen(subnetValue))
+        let usableHostRange = obj.firstAddress + ' - ' + obj.lastAddress;
+        if(subnetValue >= 31)
+          usableHostRange = "None";
         return {
           networkAddress: newNetworkAddress,
-          usableHostRange: obj.firstAddress + ' - ' + obj.lastAddress,
+          usableHostRange: usableHostRange,
           broadcastAddress: obj.broadcastAddress,
         }
       })
@@ -222,6 +225,7 @@ class App extends Component {
         <Result
           hasResult={this.state.hasResult}
           networkClass={this.state.networkClass}
+          subnetValue={this.state.subnetValue}
           subnetNumber={ip.fromPrefixLen(this.state.subnetValue)}
           ip={this.state.ip}
 
